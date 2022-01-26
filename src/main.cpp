@@ -18,14 +18,16 @@ void loop()
   if(newReading)
   {
     Serial.println(newAngle);
-      // Clear the screen.
+    // Clear the screen
     lcd.clear();
 
-    // Go to the next line.
+    // Set to first line
     lcd.gotoXY(0, 0);
 
-    // Print a number.
-    lcd.print(newAngle * 180 / 3.1416);
+    // Print the angle
+    int printAngle = newAngle * 180.0 / 3.1416;
+    lcd.print(printAngle);
+    lcd.print(" deg");
   }
 }
 
