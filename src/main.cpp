@@ -3,21 +3,49 @@
 #include "Romi32u4lcd.h"
 
 ComplementaryFilter filter;
+ComplementaryFilter filter_gyro;
+ComplementaryFilter filter_accel;
+
 Romi32U4LCD lcd;
+
+LSM6 ComplementaryFilter::imu;
 
 void setup() 
 {
   filter.init();
-  
+  filter.KAPPA = 0.5;
+  filter_gyro.init();
+  filter_gyro.KAPPA = 0.97;
+  filter_accel.init();
+  filter_accel.KAPPA = 0.01;
 }
 
 void loop() 
 {
-  static float newAngle = 0;
-  bool newReading = filter.calcAngle(newAngle);
-  if(newReading)
+
+  if(filter.imu.getStatus() & 0x01)
   {
-    Serial.println(newAngle);
+    filter.imu.read();
+
+  static float newAngle = 0;
+  filter.calcAngle(newAngle);
+
+  static float newAccelAngle = 0;
+  filter_accel.calcAngle(newAccelAngle);
+
+  static float newGyroAngle = 0;
+  filter_gyro.calcAngle(newGyroAngle);
+  
+
+
+  // if(newReading)
+  // {
+    Serial.print(newAccelAngle * 180 / 3.1416);
+    Serial.print('\t');
+    Serial.print(newAngle * 180 / 3.1416);
+    Serial.print('\t');
+    Serial.print(newGyroAngle * 180 / 3.1416);
+    Serial.print('\n');
     // Clear the screen
     lcd.clear();
 

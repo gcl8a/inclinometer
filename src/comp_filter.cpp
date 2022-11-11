@@ -1,7 +1,7 @@
 #include "comp_filter.h"
 
 #define GYRO_FACTOR 0.0175 //0875  //deg/sec
-#define KAPPA 0.99
+//#define KAPPA 0.98
 
 void ComplementaryFilter::init(void)
 { 
@@ -29,22 +29,24 @@ void ComplementaryFilter::init(void)
 
 bool ComplementaryFilter::calcAngle(float& newAngle)
 {
-  bool retVal = false;
+  
   
   //uint8_t statusA = compass.readReg(LSM303::STATUS_A);
   //if(statusA & 0x08)
-  if(imu.getStatus() & 0x01)
-  {
-    retVal = true;
+  // if(imu.getStatus() & 0x01)
+  // {
+  //   retVal = true;
 
-    imu.read();
+  //   imu.read();
 
     float angVel = (imu.dps.z * 3.1416 / 180.0 - gyroBias) ; //radians / sec
-    float delta = angVel * 0.0096; // in radians
+  
+     float delta = angVel * 0.0096; // in radians
     
     float predAngle = fusedAngle + delta;
     
     accAngle = atan2(-imu.a.y, imu.a.x); //radians
+
 
     fusedAngle = KAPPA * predAngle + (1-KAPPA) * accAngle;
 
@@ -52,9 +54,9 @@ bool ComplementaryFilter::calcAngle(float& newAngle)
 
     //returns
     newAngle = fusedAngle;
-  }
+  // }
 
-  return retVal;
+  return true;
 }
 
 bool ComplementaryFilter::calcAngle(float& accCalc, float& newAngle, float& newBias)

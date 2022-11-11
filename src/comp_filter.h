@@ -8,16 +8,19 @@ class ComplementaryFilter
 {
  private:
   const float EPSILON = 0.001;
-  LSM6 imu;
+  
 
   float fusedAngle = 0;
   float accAngle = 0;
   float gyroBias = 0;
 
 public: 
+  static LSM6 imu;
   void init(void);
   bool calcAngle(float&);
   bool calcAngle(float&, float&, float&);
+
+  float KAPPA;
 };
 
 #endif
