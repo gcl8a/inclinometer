@@ -1,11 +1,12 @@
 #include "comp_filter.h"
 
-#define GYRO_FACTOR 0.0175 //0875  //deg/sec
+//#define GYRO_FACTOR 0.0175 //0875  //deg/sec
 //#define KAPPA 0.98
 
-void ComplementaryFilter::init(void)
+void ComplementaryFilter::init(float kappa, float eps)
 { 
-  Wire.begin();
+   EPSILON = eps; KAPPA = kappa; 
+    Wire.begin();
 
   if (!imu.init())
   {

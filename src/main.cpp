@@ -12,12 +12,9 @@ LSM6 ComplementaryFilter::imu;
 
 void setup() 
 {
-  filter.init();
-  filter.KAPPA = 0.5;
-  filter_gyro.init();
-  filter_gyro.KAPPA = 0.97;
-  filter_accel.init();
-  filter_accel.KAPPA = 0.01;
+  filter.init(0.5);
+  filter_gyro.init(0.97);
+  filter_accel.init(0);
 }
 
 void loop() 
