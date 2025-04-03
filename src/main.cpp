@@ -1,25 +1,22 @@
 #include <Arduino.h>
-#include "comp_filter.h"
-#include "Romi32u4lcd.h"
+#include <comp_filter.h>
 
 ComplementaryFilter filter;
 ComplementaryFilter filter_gyro;
 ComplementaryFilter filter_accel;
 
-Romi32U4LCD lcd;
-
 LSM6 ComplementaryFilter::imu;
 
 void setup() 
 {
-  filter.init(0.5);
-  filter_gyro.init(0.97);
-  filter_accel.init(0);
+  Serial.begin(115200);
+  filter.init(0.02, 0.001);
+  filter_gyro.init(0, 0);
+  filter_accel.init(1);
 }
 
 void loop() 
 {
-
   if(filter.imu.getStatus() & 0x01)
   {
     filter.imu.read();
@@ -33,21 +30,17 @@ void loop()
     static float newGyroAngle = 0;
     filter_gyro.calcAngle(newGyroAngle);
   
+    Serial.print('>');
+    Serial.print("accel:");
     Serial.print(newAccelAngle * 180 / 3.1416);
-    Serial.print('\t');
-    Serial.print(newAngle * 180 / 3.1416);
-    Serial.print('\t');
+    Serial.print('\n');
+    Serial.print('>');
+    Serial.print("gyro:");
     Serial.print(newGyroAngle * 180 / 3.1416);
     Serial.print('\n');
-    // Clear the screen
-    lcd.clear();
-
-    // Set to first line
-    lcd.gotoXY(0, 0);
-
-    // Print the angle
-    int printAngle = newAngle * 180.0 / 3.1416;
-    lcd.print(printAngle);
-    lcd.print(" deg");
+    Serial.print('>');
+    Serial.print("fused:");
+    Serial.print(newAngle * 180 / 3.1416);
+    Serial.print('\n');
   }
 }

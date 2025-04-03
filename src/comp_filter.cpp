@@ -1,8 +1,5 @@
 #include "comp_filter.h"
 
-//#define GYRO_FACTOR 0.0175 //0875  //deg/sec
-//#define KAPPA 0.98
-
 void ComplementaryFilter::init(float kappa, float eps)
 { 
    EPSILON = eps; KAPPA = kappa; 
@@ -30,18 +27,17 @@ void ComplementaryFilter::init(float kappa, float eps)
 
 bool ComplementaryFilter::calcAngle(float& newAngle)
 {
-    float angVel = (imu.dps.z * 3.1416 / 180.0 - gyroBias) ; //radians / sec
+    float angVel = (imu.dps.y * 3.1416 / 180.0 - gyroBias); //radians / sec
   
-     float delta = angVel * 0.0096; // in radians
+    float delta = angVel * 0.0096; // in radians
     
     float predAngle = fusedAngle + delta;
     
-    accAngle = atan2(-imu.a.y, imu.a.x); //radians
+    accAngle = atan2(-imu.a.x, imu.a.z); //radians
 
+    fusedAngle = predAngle + KAPPA * (accAngle - predAngle);
 
-    fusedAngle = KAPPA * predAngle + (1-KAPPA) * accAngle;
-
-    gyroBias += EPSILON * (predAngle - accAngle) / 0.0096;
+    gyroBias -= EPSILON * (accAngle - predAngle) / 0.0096;
 
     newAngle = fusedAngle;
 
