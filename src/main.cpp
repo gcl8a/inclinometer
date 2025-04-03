@@ -24,19 +24,15 @@ void loop()
   {
     filter.imu.read();
 
-  static float newAngle = 0;
-  filter.calcAngle(newAngle);
+    static float newAngle = 0;
+    filter.calcAngle(newAngle);
 
-  static float newAccelAngle = 0;
-  filter_accel.calcAngle(newAccelAngle);
+    static float newAccelAngle = 0;
+    filter_accel.calcAngle(newAccelAngle);
 
-  static float newGyroAngle = 0;
-  filter_gyro.calcAngle(newGyroAngle);
+    static float newGyroAngle = 0;
+    filter_gyro.calcAngle(newGyroAngle);
   
-
-
-  // if(newReading)
-  // {
     Serial.print(newAccelAngle * 180 / 3.1416);
     Serial.print('\t');
     Serial.print(newAngle * 180 / 3.1416);
@@ -55,22 +51,3 @@ void loop()
     lcd.print(" deg");
   }
 }
-
-
-
-// void loop()
-// {
-//   // Clear the screen.
-//   lcd.clear();
-
-//   // Print a string.
-//   lcd.print("hi");
-
-//   // Go to the next line.
-//   lcd.gotoXY(0, 1);
-
-//   // Print a number.
-//   lcd.print(1234);
-
-//   delay(1000);
-// }

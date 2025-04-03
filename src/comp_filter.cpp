@@ -30,16 +30,6 @@ void ComplementaryFilter::init(float kappa, float eps)
 
 bool ComplementaryFilter::calcAngle(float& newAngle)
 {
-  
-  
-  //uint8_t statusA = compass.readReg(LSM303::STATUS_A);
-  //if(statusA & 0x08)
-  // if(imu.getStatus() & 0x01)
-  // {
-  //   retVal = true;
-
-  //   imu.read();
-
     float angVel = (imu.dps.z * 3.1416 / 180.0 - gyroBias) ; //radians / sec
   
      float delta = angVel * 0.0096; // in radians
@@ -53,9 +43,7 @@ bool ComplementaryFilter::calcAngle(float& newAngle)
 
     gyroBias += EPSILON * (predAngle - accAngle) / 0.0096;
 
-    //returns
     newAngle = fusedAngle;
-  // }
 
   return true;
 }
@@ -64,8 +52,6 @@ bool ComplementaryFilter::calcAngle(float& accCalc, float& newAngle, float& newB
 {
   bool retVal = false;
   
-  //uint8_t statusA = compass.readReg(LSM303::STATUS_A);
-  //if(statusA & 0x08)
   if(imu.getStatus() & 0x01)
   {
     retVal = true;
